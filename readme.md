@@ -1,124 +1,80 @@
-<!--
-Creator: <Name>
-Location: SF
--->
+
+Creator: Misha LeClair
+Location: San Francisco
 
 ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png)
 
-#Training: Model a Game with OOP
-
-You've learned about OOP, but let's look at how to **incorporate ojbect oriented programming patterns into a web site**.  This document has an example of how we might approach making a card-matching memory game.
+### Project 0: Racing Game
 
 ### User Stories & Game Mechanics
-1. A user can see a set of face-down cards.
-2. A user can select a card to "flip it over" and see its other side.
-3. If the user flips two matching cards face-up at the same time, the cards will be removed from the game.
-4. If the user flips two non-matching cards face-up at the same time, both cards will turn back face down.
-5. The user wins when they've matched all the cards!
+1. A user is assigned a car to drive.
+2. A user can move the car forward by pressing on a keyboard key.
+3. If the user crosses the finish line first, they win.
 
-### Check for Understanding
+### Data Structures
 
-What are some data structures we might use when building a Memory game?
+**Car**
+  - `carImage` (string)(image)
+  - `moveForward()` (Function - move (drive) the car forward with a `key`)
+  - `speedUp()` (Function - increases the `moveForward` distance when the key is held down)
+  - `Car(player)` (Function - constructor, create a car based on which player turn it is)
 
-<details><summary>click to see examples</summary>
-  Did you think of making a `Card` object type? A `Game`?
-</details>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-### Data Structures for "Memory" (Independent Practice)
-Let's consider object types Card, Game, and Pair.
-
-Work with a partner to list some properties and methods of cards, the game itself, and a particular pair.
-
-* List the type of each property (number, boolean, `Card`, etc.).
-* List the parameters that each method will take.
-* Don't forget a constructor!
-
-**Card**
-<details><summary>click for examples properties</summary>
-  - `faceImage` (string)
-  - `isFaceUp` (boolean)
-  - `isMatched` (boolean)
-  - `flipOver()` (Function - change whether the card is currently face up)
-  - `Card(options)` (Function - constructor, create a card based on options like whether it should be a random image or what the image should be)
-</details>
-
-**Pair**
-<details><summary>click for examples for Pair</summary>
-  - `card1` (Card)
-  - `card2` (Card)
-  - `addCard(someCard)` (Function - add a specific card to the pair)
-  - `isMatch()` (Function - check if this pair is a match)
-  - `Pair()` (Function - constructor, create an empty pair)
-</details>
+**Player**
+  - `player1` (Car)
+  - `player2` (Car)
+  - `playerTurn(player1, player2))` (Function - starts with player1 and alternates turns of play)
+  - `raceDistance()` (Function - counts the distance a player travels in set amount of time)
+  - `Player()` (Function - constructor, create a player)
 
 **Game**
-<details><summary>click for examples for Game</summary>
-  - `current_guess` (Pair)
-  - `cards` ([Card])
-  - `reset()` (Function - resets the game!)
-  - `randomize()` (Function - creates randomized game)
-  - `Game(numCards)` (Function - constructor)
-  - `removeCard(card)` (Function - remove this card from the game)
+  - `Game()` (Function - constructor)
+  - `raceClock()` (Function - starts the clock (go!), runs the clock(race time!), stops the clock (stop!))
+  - `farthestDistance()` (Function - compares `raceDistance` for `player1` and `player2` time and notes which traveled the farthest in the set amount of time)
   - `hasWon()` (Function - check if the game has been won!)
   - `celebrate()` (Function - display a win message)
-</details>
+  - `reset()` (Function - resets the game!)
+
+**Button**
+- `startButton` (object to click)
+- `Button` (Function - constructor)
 
 ### Development Stories
 
-1. A user can see a set of face-down cards.
-  * Create HTML structure to display cards on screen (Handlebars?).
-  * Ensure that cards start out displayed face-down (in `Card` constructor?).
+1. A user can see a welcome screen.
+  * Create HTML for welcome.
+  * Create HTML for instructions.
+  * Create car image, loaded on the screen.
+  * Create `button`, click when you're ready to start.
 
-2. A user can select a card to "flip it over" and see its other side.
-  * Add click event listener to cards that:
-     - shows the other side of the card (`flipOver`)
-     - creates or updates a pair (don't add same card twice though!)
-     - checks if the cards in the pair match (`isMatch`)
-     - continues according to result (see 3 and 4, below)
+2. A user is told to go!
+  * On `button` `click`, `setTimeout`.
+  * The `raceClock` starts, alerting user Go!
+  * The `raceClock` counts, alerting user Race time!  
+  * The user can `key` spacebar to move forward.
+  * The user can hold down spacebar to move faster.
+  * The `raceClock` ends, alert user Stop!
+  * Alert user `raceDistance`.
 
-3. If the user flips two matching cards face-up at the same time, the cards will be removed from the game.
-  * Assuming `isMatch()` gave true for the current pair:
-    - set a short timer so the user can see that the cards matched (`setTimeout`), then...
-    - replace each card in the pair with a "blank space" image to let user know it's been removed
-    - use `off` to take off the click event listener from both cards
-    - remove both cards from the game's list of cards
+3. A second user gets to race.
+  * Alert `player2`it's their turn.
+  * On `button` `click`, `setTimeout`.
+  * The `raceClock` starts, alerting user Go!
+  * The `raceClock` counts, alerting user Race time!  
+  * The user can `key` spacebar to move forward.
+  * The user can hold down spacebar to move faster.
+  * The `raceClock` ends, alert user Stop!
+  * Alert user `raceDistance`.
 
-4. If the user flips two non-matching cards face-up at the same time, both cards will turn back face down.
-  * Assuming `isMatch()` gave false for the current pair:
-    - set a short timer so the user can see the cards (`setTimeout`), then...
-    - flip each card in the pair back over so they're face-down
+4. When both have taken turns.
+  * Calculate `farthestDistance` by comparing `raceDistance` of `player1` and `player2`.
+  * Alert `hasWon`.
+  * Fire `celebrate`.
+  * Insert play again button.
 
-5. The user wins when they've matched all the cards!
-  * Every time there is a match, the Game should also check if its cards array is now empty. (`hasWon`)
-  * If so, show a win screen (`celebrate`)
-
+5. If user clicks play again button.
+  * On `button` click, reset game.
 
 ###Potential Challenges / Development Questions
 
-1. How to randomize or shuffle card locations at the beginning of the game?
-2. How to ensure that all the cards have matches?
-3. How to change the image for a card that's face-down, face-up, or matched and removed from game?
-4. Is there a way to hide the identity of a card even from users who know how to use the Chrome dev tools?
-5. Cool card flip animation?!
-
-### Deliverable
-
-Design user stories, data structures, development stories, and potential challenges for a **racing game** in which two players use the keyboard to control "cars" that race across the screen.
-
-Here are some popular bonus features that would affect your data structure plan:
-
-1. How would you make your player's "cars" use custom images?
-2. Can a player type in their name to see custom win messages?
-3. Can you enable a reset button to restart the race?
-4. How about a win counter that spans across multiple races?
-
-As you work, you can edit this README to add a section at the top with your name, a link to the original repository, and a 3-5 sentence reflection on completing this assignment. Push your updates to GitHub and add a link to the repo to the "My Work" section of your website!
+1. What if they get the same `raceDistance`?
+2. Help delineating OOJS methods that are global is scope versus instances.
